@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>hanabi</title>
+    <title>fireworks</title>
     <meta name="viewport" content="width=device-width, viewport-fit=cover, shrink-to-fit=no" />
     <style>
         * {
@@ -67,6 +67,9 @@
 
         let flg = false;
         let mauseflg = false;
+
+        let mflg1 = false;
+        let mflg2 = false;
 
         let max = 0;
 
@@ -686,30 +689,55 @@
         const hanabi48 = children[47];
         const hanabi49 = children[48];
 
+        const listener = new THREE.AudioListener();
+        camera.add(listener);
+        const AudioLoader = new THREE.AudioLoader();
+        const hanabiSound = new THREE.Audio(listener);
+        AudioLoader.load('./hanabbakuhatu.mp3', function (buffer) {
+            hanabiSound.setBuffer(buffer);
+            hanabiSound.setLoop(false);
+            hanabiSound.setVolume(1);
+
+        });
+
+        const hanabiloopSound = new THREE.Audio(listener);
+        AudioLoader.load('./hanabiloop4.mp3', function (buffer) {
+            hanabiloopSound.setBuffer(buffer);
+            hanabiloopSound.setLoop(false);
+            hanabiloopSound.setVolume(0.2);
+
+        });
+
 
         function animate() {
             requestAnimationFrame(animate);
             if (mauseflg == true) {
                 if (sphere.position.z - max >= 2) {
                     sphere.position.z -= 0.1;
+
                 }
                 if (sphere.position.z - max < 2 && sphere.position.z - max >= 1) {
                     sphere.position.z -= 0.01 * 2;
                     sphere_material.opacity -= 0.001;
+                    hanabiloopSound.play();
                 }
                 if (sphere.position.z - max < 1 && sphere.position.z - max >= 0.5) {
                     sphere.position.z -= 0.005 * 2;
                     sphere_material.opacity -= 0.001;
+
                 }
                 if (sphere.position.z - max < 0.5 && sphere.position.z - max >= 0.025) {
                     sphere.position.z -= 0.0025 * 2;
                     sphere_material.opacity -= 0.01;
+
                 }
                 if (sphere.position.z - max < 0.025 && sphere.position.z - max > 0) {
                     sphere.position.z -= 0.00125 * 2;
                     sphere_material.opacity -= 0.01;
+
                 }
                 if (sphere.position.z - max <= 0 && flg == false) {
+                    hanabiSound.play()
                     hanabi1.material.opacity += 0.01;
                     hanabi2.material.opacity += 0.01;
                     hanabi3.material.opacity += 0.01;
@@ -817,6 +845,8 @@
                     if (hanabi1.material.opacity <= 0) {
                         mauseflg = false;
                         flg = false;
+                        mflg1 = false;
+                        mflg2 = false;
                     }
 
                 }
